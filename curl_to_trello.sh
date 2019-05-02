@@ -1,8 +1,12 @@
 card_name=$1
 card_desc=$2
+
 list_id=$3
+
+#uthe user who creates the card in their board
 api_key=''
 api_token=''
+
 count=`curl --request GET   --url 'https://api.trello.com/1/lists/'$list_id'/cards?key='$api_key'&token='$api_token'' | grep -c "$card_name"`
 if [ $count -eq 0 ]
 then
