@@ -10,7 +10,7 @@ echo "pip installed"
 echo "installing the required packages"
 for i in `cat requirements.txt`
 do
-	pip install $i
+	sudo pip install $i
 done
 
 python flask_chota.py
