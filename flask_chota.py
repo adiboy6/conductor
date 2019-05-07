@@ -36,7 +36,7 @@ def sendtoTrello():
 		if idList!='':
 			print ("creating a card:\n")	
 			
-			json_content={'key':'','token':'','idList':idList,'name':card_name,'desc':description}
+			json_content={'key':'','token':'','idList':idList,'name':card_name,'desc':str(description)}
 			
 			with open('url_params.json','w') as json_content_temp:
 				json.dump(json_content,json_content_temp)
