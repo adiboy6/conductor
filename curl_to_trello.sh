@@ -1,15 +1,38 @@
-card_name=$1
-card_desc=$2
+log_id=$1
 
-list_id=$3
+permalink='http://172.16.28.25:9000/messages/graylog_0/'$log_id''
 
 #uthe user who creates the card in their board
-api_key=''
-api_token=''
+api_key=$(sh quote_remove.sh `cat url_params | jq '.key'`)
 
-count=`curl --request GET   --url 'https://api.trello.com/1/lists/'$list_id'/cards?key='$api_key'&token='$api_token'' | grep -c "$card_name"`
+api_token==$(sh quote_remove.sh `cat url_params | jq '.token'`)
+
+list_id==$(sh quote_remove.sh `cat url_params | jq '.idList'`)
+
+card_name==$(sh quote_remove.sh `cat url_params | jq '.name'`)
+
+
+count=`curl --request GET --url 'https://api.trello.com/1/lists/'$list_id'/cards?key='$api_key'&token='$api_token'' | grep -c "$card_name"`
 if [ $count -eq 0 ]
 then
-curl --request POST \
-  --url 'https://api.trello.com/1/cards?name='$card_name'&desc='$card_desc'&pos=top&idList='$list_id'&keepFromSource=all&key='$api_key'&token='$api_token''
-  fi
+
+	card_id==$(sh quote_remove.sh `curl --request POST --url 'https://api.trello.com/1/cards/' -H 'Content-Type: application/json' --data @url_params.json | jq '.id'`)
+	
+	if [ $? -ne 0 ]
+	then
+		echo "card isn't created"
+	else
+
+		echo "card created"
+
+		curl --request POST --url 'https://api.trello.com/1/cards/'$card_id'/attachments?key='$api_key'&token='$api_token'&url='$permalink'&name=Permalink'
+	
+		if [ $? -ne 0 ]
+		then
+        	echo "Permalink not created"
+		else
+			echo "Permalink created"
+		fi
+	
+	fi
+fi

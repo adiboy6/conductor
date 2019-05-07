@@ -3,6 +3,7 @@ from flask import request
 import os
 import json
 import urllib
+import sys
 
 app = Flask(__name__)
 
@@ -15,7 +16,7 @@ def sendtoTrello():
 	data1=request.json
 	for i in data1['check_result']['matching_messages']:
 		card_name=""
-		message=urllib.quote(i["message"])
+		description=urllib.quote(json.dumps(i))
 		if('caller_method_name' in i['fields']):
 			if(i['fields']['caller_method_name']!='<init>'):
 				card_name=(i['fields']['app_name']+"-"+i['fields']['caller_method_name'])
@@ -29,15 +30,26 @@ def sendtoTrello():
 			idList=hire[1]
 		elif i['fields']['app_name'] in engage[0]:
 			idList=engage[1]
-		else:
+		elif i['fields']['app_name'] in nurture[0]:
 			idList=nurture[1]
+		
+		if idList!='':
+			print ("creating a card:\n")	
+			
+			json_content={'key':'','token':'','idList':idList,'name':card_name,'desc':description]}
+			
+			with open('url_params.json','w') as json_content_temp:
+				json.dump(json_content,json_content_temp)
 
-		os.system("sh curl_to_trello.sh "+card_name+" "+message+" "+idList)
-		print("\n\n")
+			os.system("sh curl_to_trello.sh "+i["id"])
+			print("\n\n")
+		else:
+			pass
+
 	return "Request Processed.\n"
 
 @app.route('/')
 def hello_world():
-	return 'TICKETRAISE'
+	return 'TICKETRAISER'
 
 app.run(host='0.0.0.0',port=5000)
