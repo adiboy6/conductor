@@ -16,7 +16,7 @@ def sendtoTrello():
 	data1=request.json
 	for i in data1['check_result']['matching_messages']:
 		card_name=""
-		description=urllib.quote(json.dumps(i))
+		description=json.dumps(i)
 		if('caller_method_name' in i['fields']):
 			if(i['fields']['caller_method_name']!='<init>'):
 				card_name=(i['fields']['app_name']+"-"+i['fields']['caller_method_name'])
@@ -36,7 +36,7 @@ def sendtoTrello():
 		if idList!='':
 			print ("creating a card:\n")	
 			
-			json_content={'key':'','token':'','idList':idList,'name':card_name,'desc':description]}
+			json_content={'key':'','token':'','idList':idList,'name':card_name,'desc':description}
 			
 			with open('url_params.json','w') as json_content_temp:
 				json.dump(json_content,json_content_temp)
