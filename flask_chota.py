@@ -7,10 +7,6 @@ import sys
 
 app = Flask(__name__)
 
-hire=[{'onboarding','auth-server'},'5cc7d40ccb79a267e1e5644f']
-engage=[{'data-processor','ats'},'5cc7d42140535067a619d36b']
-nurture=[{'starfox','survey'},'5cc7d417e375a43d1a8bed84']
-
 @app.route("/trello", methods=["POST"])
 def sendtoTrello():
 	data1=request.json
