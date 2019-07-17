@@ -1,4 +1,4 @@
-<b>Used to create tickets automatically</b>
+<b>Used to create tickets automatically!</b>
 
 <ul>
 <li>Kindly add your Trello's key and token in the python script</li>
